@@ -17,7 +17,7 @@ defmodule AsyncProcess.Validation do
   end
 
   defp create_order_items_async(items) do
-    stream = Task.Supervisor.async_stream(Validate.TaskSupervisor, items, fn item -> create_item(item) end)
+    stream = Task.Supervisor.async_stream(Validation.TaskSupervisor, items, fn item -> create_item(item) end)
     Enum.to_list(stream)
   end
 
