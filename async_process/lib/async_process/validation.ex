@@ -18,7 +18,12 @@ defmodule AsyncProcess.Validation do
 
   defp create_order_items_async(items) do
     stream = Task.Supervisor.async_stream(Validation.TaskSupervisor, items, fn item -> create_item(item) end)
-    Enum.to_list(stream)
+    Enum.map(stream, fn item ->
+      if match?({:ok, _}, item) do
+        {:ok, transformed} = item
+        transformed
+      end
+    end)
   end
 
   defp create_order_items(items) do
